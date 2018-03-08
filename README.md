@@ -4,19 +4,26 @@
 
 **Live demo:** http://panjiachen.github.io/vueAdmin-template
 
-[中文文档](https://github.com/PanJiaChen/vueAdmin-template/blob/master/README-zh.md)
-
 ## Build Setup
 
 ``` bash
 
 # Clone project
-git clone https://github.com/PanJiaChen/vueAdmin-template.git
+git clone https://github.com/dengshaochun/vueAdmin-Flask-template.git
+
+# change to backend directory
+cd backend
+
+# run backend servers, server localhost:5000, user: admin@jiguang.cn/1234
+python manange.py runserver
+
+# change to frontend directory
+cd frontend
 
 # Install dependencies
 npm install
 
-# serve with hot reload at localhost:9528
+# server with hot reload at localhost:9528
 npm run dev
 
 # build for production with minification
