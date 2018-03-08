@@ -13,6 +13,7 @@
     "test": "npm run lint"
   },
   "dependencies": {
+    "2015": "0.0.1",
     "axios": "0.17.1",
     "element-ui": "2.0.8",
     "js-cookie": "2.2.0",
