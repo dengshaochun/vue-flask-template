@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/2/27 17:41
 # @Author  : Dengsc
-# @Site    : 
+# @Site    :
 # @File    : config.py
 # @Software: PyCharm
 
@@ -19,6 +19,8 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-are-never-guess-dengsc'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    ADMIN = 'admin@jiguang.cn'
 
     @staticmethod
     def init_app(app):

@@ -14,7 +14,7 @@ from app import create_app, db
 from app.models.account import User, Role
 
 
-app = create_app(os.environ.get('JDATA_CONFIG') or 'default')
+app = create_app(os.environ.get('CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
 

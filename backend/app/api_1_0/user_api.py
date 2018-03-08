@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/2/27 19:46
 # @Author  : Dengsc
-# @Site    : 
+# @Site    :
 # @File    : user_api.py
 # @Software: PyCharm
 
@@ -10,7 +10,6 @@
 from flask_restful import Resource, reqparse
 from ..models.account import User, Role
 from .errors import unauthorized
-from authentication import auth
 
 
 parser = reqparse.RequestParser()

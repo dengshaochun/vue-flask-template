@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/2/27 17:46
 # @Author  : Dengsc
-# @Site    : 
+# @Site    :
 # @File    : __init__.py.py
 # @Software: PyCharm
 
 
-import requests
 from datetime import datetime
 from app import db
 from app import login_manager
@@ -15,7 +14,6 @@ from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
 from flask import current_app
-from app.util import password_create
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -88,7 +86,7 @@ class User(UserMixin, db.Model):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
-            if self.email == current_app.config['JDATA_ADMIN']:
+            if self.email == current_app.config['ADMIN']:
                 self.role = Role.query.filter_by(permission=0xff).first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
@@ -142,33 +140,6 @@ class User(UserMixin, db.Model):
             return None  # invalid token
         user = User.query.get(data['id'])
         return user
-
-    @staticmethod
-    def sync_users():
-        skiper, counter = 0, 0
-        try:
-            re = requests.get(current_app.config['SYNC_USERS_URL'])
-            for k in re.json().get('data', {}).get('list', []):
-                user_obj = User.query.filter_by(email=k.get('email')).first()
-                if not user_obj:
-                    user_obj = User()
-                    user_obj.username = k.get('name')
-                    user_obj.email = k.get('email')
-                    user_obj.department = k.get('iportal_department')
-                    user_obj.mobile = k.get('mobile')
-                    user_obj.position = k.get('title')
-                    user_obj.role = Role.query.filter_by(permission=Permission.COMMON).first()
-                    user_obj.password = password_create()
-                    db.session.add(user_obj)
-                    counter += 1
-                else:
-                    skiper += 1
-            db.session.commit()
-            current_app.logger.info('sync users success, counter: %s, skiper: %s' % (counter, skiper))
-            return counter, skiper
-        except Exception as e:
-            current_app.logger.warn('sync users error! %s' % str(e))
-            return counter, skiper
 
     def __repr__(self):
         return '<User %r>' % self.username

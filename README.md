@@ -1,10 +1,8 @@
-# vueAdmin-template
+# vueAdmin-Flask-template
 
-> A minimal vue admin template with Element UI & axios & iconfont & permission control & lint
+> A minimal vue admin template with Element UI & axios & iconfont & permission control & lint & flask
 
-**Live demo:** http://panjiachen.github.io/vueAdmin-template
-
-## Build Setup
+## Backend Build Setup
 
 ``` bash
 
@@ -14,11 +12,20 @@ git clone https://github.com/dengshaochun/vueAdmin-Flask-template.git
 # change to backend directory
 cd backend
 
+# install pipenv and install requirements python packages
+sudo pip install pipenv && pipenv install
+
 # run backend servers, server localhost:5000, user: admin@jiguang.cn/1234
-python manange.py runserver
+pipenv run python manange.py runserver
+
+```
+
+## Frontend Build Setup
+
+```bash
 
 # change to frontend directory
-cd frontend
+cd ../frontend
 
 # Install dependencies
 npm install
@@ -35,17 +42,3 @@ npm run build --report
 
 ## Demo
 ![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
-
-## Extra
-If you want router permission && generate menu by user roles , you can use this branch [permission-control](https://github.com/PanJiaChen/vueAdmin-template/tree/permission-control)
-
-## Related Project
- [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
-
- [electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin)
-
-
-## License
-[MIT](https://github.com/PanJiaChen/vueAdmin-template/blob/master/LICENSE) license.
-
-Copyright (c) 2017-present PanJiaChen
