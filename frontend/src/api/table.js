@@ -4,6 +4,9 @@ export function getList(token) {
   return request({
     url: '/api/table/list',
     method: 'get',
-    params: { token }
+    auth: {
+      username: token,
+      password: ""
+    }
   })
 }

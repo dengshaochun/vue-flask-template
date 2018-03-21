@@ -4,9 +4,9 @@ export function login(username, password) {
   return request({
     url: '/api/user/login',
     method: 'post',
-    data: {
-      username,
-      password
+    auth: {
+      username: username,
+      password: password
     }
   })
 }
@@ -15,7 +15,10 @@ export function getInfo(token) {
   return request({
     url: '/api/user/info',
     method: 'get',
-    params: { token }
+    auth: {
+      username: token,
+      password: ""
+    }
   })
 }
 
