@@ -1,4 +1,4 @@
-# vueAdmin-Flask-template
+# vue-flask-template
 
 > A minimal vue admin template with Element UI & axios & iconfont & permission control & lint & flask
 
@@ -7,7 +7,7 @@
 ``` bash
 
 # Clone project
-git clone https://github.com/dengshaochun/vueAdmin-Flask-template.git
+git clone https://github.com/dengshaochun/vue-flask-template.git
 
 # change to backend directory
 cd backend
@@ -39,6 +39,7 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
+Frontend demo copy from `https://github.com/PanJiaChen/vueAdmin-template`
 
 ## Demo
 ![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
