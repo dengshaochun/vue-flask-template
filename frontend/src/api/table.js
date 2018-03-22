@@ -6,7 +6,7 @@ export function getList(token) {
     method: 'get',
     auth: {
       username: token,
-      password: ""
+      password: ''
     }
   })
 }

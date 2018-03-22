@@ -17,7 +17,7 @@ export function getInfo(token) {
     method: 'get',
     auth: {
       username: token,
-      password: ""
+      password: ''
     }
   })
 }
