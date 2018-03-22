@@ -7,7 +7,7 @@
 # @Software: PyCharm
 
 
-from flask import g, jsonify
+from flask import g, jsonify, request
 from flask_httpauth import HTTPBasicAuth
 from ..models.account import User
 from . import api_1_0
@@ -18,6 +18,8 @@ auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(email_or_token, password):
+    # 查看参数是否携带token,否则在header中查找
+    email_or_token = email_or_token if email_or_token else request.headers.get('X-Token', '')
     if email_or_token == '':
         return False
     if password == '':

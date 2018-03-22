@@ -1,12 +1,8 @@
 import request from '@/utils/request'
 
-export function getList(token) {
+export function getList() {
   return request({
     url: '/api/table/list',
-    method: 'get',
-    auth: {
-      username: token,
-      password: ''
-    }
+    method: 'get'
   })
 }

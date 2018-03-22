@@ -38,7 +38,6 @@
 
 <script>
 import { getList } from '@/api/table'
-import { getToken } from '@/utils/auth'
 
 export default {
   data() {
@@ -63,7 +62,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getList(getToken()).then(response => {
+      getList().then(response => {
         this.list = response.data.items
         this.listLoading = false
       })
