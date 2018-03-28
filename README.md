@@ -15,7 +15,13 @@ cd backend
 # install pipenv and install requirements python packages
 sudo pip install pipenv && pipenv install
 
-# run backend servers, server localhost:5000, user: admin@jiguang.cn/1234
+# init database
+pipenv run python manange.py db init && pipenv run python manange.py db migrate && pipenv run python manange.py db upgrade
+
+# feed test data
+pipenv run python manange.py feed_data
+
+# run backend servers, server localhost:5000, user: dengsc@example.com pass:12345
 pipenv run python manange.py runserver
 
 ```
