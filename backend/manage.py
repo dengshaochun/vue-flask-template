@@ -7,38 +7,53 @@
 # @Software: PyCharm
 
 
-import os
-from flask_script import Manager, Shell
-from flask_migrate import MigrateCommand, Migrate
-from app import create_app, db
-from app.models.account import User, Role
+from flask_script import Manager, Shell, Server
+from flask_migrate import MigrateCommand
 
+from app import create_app
+from app.models.account import (User, Role, Log)
+from app.database import db
+from app.initializtion import Init
 
-app = create_app(os.environ.get('CONFIG') or 'default')
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+app = create_app()
+
 manager = Manager(app)
-migrate = Migrate(app, db)
 
 
-def make_shell_context():
-    return dict(app=app, db=db, User=User, Role=Role)
-
-
-manager.add_command('db', MigrateCommand)
-manager.add_command('shell', Shell(make_context=make_shell_context))
+def _make_context():
+    """Return context dict for a shell session so you can access
+    app, db, and the User model by default.
+    """
+    return {'app': app,
+            'db': db,
+            'User': User,
+            'Role': Role,
+            'Log': Log
+            }
 
 
 @manager.command
 def test():
-    import unittest
-    tests = unittest.TestLoader().discover('tests')
-    unittest.TextTestRunner(verbosity=2).run(tests)
+    """Run the tests."""
+    import pytest
+    exit_code = pytest.main(['tests', '-q'])
+    return exit_code
 
 
 @manager.command
-def clear_alembic():
-    from app.models.account import Alembic
-    Alembic.clear_a()
+def feed_data():
+    Init.add_role()
+    Init.add_user()
 
+
+manager.add_command('server', Server())
+manager.add_command('shell', Shell(make_context=_make_context))
+manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':
     manager.run()

@@ -7,19 +7,17 @@
 # @Software: PyCharm
 
 
-from flask import g, jsonify, request
-from flask_httpauth import HTTPBasicAuth
-from ..models.account import User
-from . import api_1_0
+from flask import g, request
+from app.extensions import auth
+from app.models.account import User
+from app.api.v1 import api_blueprint
 from .errors import unauthorized, forbidden
-
-auth = HTTPBasicAuth()
 
 
 @auth.verify_password
 def verify_password(email_or_token, password):
     # 查看参数是否携带token,否则在header中查找
-    email_or_token = email_or_token if email_or_token else request.headers.get('X-Token', '')
+    email_or_token = email_or_token if email_or_token else request.headers.get('Token', '')
     if email_or_token == '':
         return False
     if password == '':
@@ -37,19 +35,3 @@ def verify_password(email_or_token, password):
 @auth.error_handler
 def auth_error():
     return unauthorized('Invalid credentials')
-
-
-@api_1_0.before_request
-@auth.login_required
-def before_request():
-    if not g.current_user.is_anonymous() and \
-            not g.current_user.confirmed:
-        return forbidden('Unconfirmed account')
-
-
-@api_1_0.route('/tokens', methods=['GET', 'POST'])
-def get_token():
-    if g.current_user.is_anonymous() or g.token_used:
-        return unauthorized('Invalid credentials')
-    return jsonify({'token': g.current_user.generate_auth_token(
-        expiration=3600), 'expiration': 3600})

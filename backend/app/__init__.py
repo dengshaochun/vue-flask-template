@@ -7,48 +7,51 @@
 # @Software: PyCharm
 
 
+"""
+The demo module, containing the app factory function.
+"""
+
+import os
+
 from flask import Flask
-from flask_bootstrap import Bootstrap
-from flask_login import LoginManager
-from flask_mail import Mail
-from flask_moment import Moment
-from flask_sqlalchemy import SQLAlchemy
-from flask_restful import Api
-from flask_cors import CORS
-from config import config
 
-bootstrap = Bootstrap()
-mail = Mail()
-moment = Moment()
-db = SQLAlchemy()
-api = Api()
-cors = CORS()
-login_manager = LoginManager()
-login_manager.session_protection = 'strong'
-login_manager.login_view = 'account.login'
+from app.settings import ProdConfig, DevConfig
+from app.extensions import (
+    db,
+    migrate,
+    cors,
+    login_manager
+)
+from app.api.v1 import api_blueprint
+
+if os.getenv('FLASK_ENV') == 'prod':
+    DefaultConfig = ProdConfig
+else:
+    DefaultConfig = DevConfig
 
 
-def create_app(config_name):
+def create_app(config_object=DefaultConfig):
+    """
+    An application factory, as explained here:
+        http://flask.pocoo.org/docs/patterns/appfactories/
+
+    :param config_object: The configuration object to use.
+    :return: 
+    """
+
     app = Flask(__name__)
-    app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
-
-    bootstrap.init_app(app)
-    mail.init_app(app)
-    moment.init_app(app)
-    db.init_app(app)
-    login_manager.init_app(app)
-    cors.init_app(app, resources={"/api/*": {"origins": "*"}})
-
-    from .api_1_0 import api_1_0 as api_blueprint
-    app.register_blueprint(api_blueprint, url_prefix='/api/v1.0')
-
-    from api_1_0.user_api import LoginAPI, UserAPI, TableAPI, LogoutAPI
-    api.add_resource(LoginAPI, '/api/user/login')
-    api.add_resource(LogoutAPI, '/api/user/logout')
-    api.add_resource(UserAPI, '/api/user/info')
-    api.add_resource(TableAPI, '/api/table/list')
-
-    api.init_app(app)
-
+    app.config.from_object(config_object)
+    register_extensions(app)
+    register_blueprints(app)
     return app
+
+
+def register_extensions(app):
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
+    cors.init_app(app, resources={'/api/*': {'origins': '*'}})
+
+
+def register_blueprints(app):
+    app.register_blueprint(api_blueprint)

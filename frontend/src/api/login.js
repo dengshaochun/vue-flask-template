@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function login(username, password) {
   return request({
-    url: '/api/user/login',
+    url: '/user/login',
     method: 'post',
     auth: {
       username: username,
@@ -13,14 +13,14 @@ export function login(username, password) {
 
 export function getInfo() {
   return request({
-    url: '/api/user/info',
+    url: '/user/info',
     method: 'get'
   })
 }
 
 export function logout() {
   return request({
-    url: '/api/user/logout',
+    url: '/user/logout',
     method: 'post'
   })
 }

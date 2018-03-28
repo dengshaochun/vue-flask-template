@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2018/2/27 17:46
+# @Time    : 2018/3/28 20:03
 # @Author  : Dengsc
-# @Site    :
-# @File    : __init__.py.py
+# @Site    : 
+# @File    : account.py.py
 # @Software: PyCharm
 
 
@@ -14,9 +14,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
 from flask import current_app
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+from app.database import (Model, SurrogatePK)
 
 
 @login_manager.user_loader
@@ -31,43 +29,31 @@ class Permission:
     ADMINISTER = 0x80
 
 
-class Role(db.Model):
+class Role(SurrogatePK, Model):
     __tablename__ = 'roles'
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permission = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __repr__(self):
-        return '<Role %r>' % self.name
+        return '{0}'.format(self.name)
 
 
-class UserLogs(db.Model):
-    __tablename__ = 'user_logs'
-    id = db.Column(db.Integer, primary_key=True)
+class Log(SurrogatePK, Model):
+    __tablename__ = 'logs'
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     log_type = db.Column(db.String(64))
     log_main = db.Column(db.String(200))
     log_context = db.Column(db.String(300))
     log_time = db.Column(db.DateTime, default=datetime.now())
 
-    def to_json(self):
-        return {
-            'log_type': self.log_type,
-            'log_context': self.log_context,
-            'log_time': self.log_time.strftime('%Y-%m-%d %H:%M:%S'),
-            'log_ip': eval(self.log_main).get('ip'),
-            'user_agent': eval(self.log_main).get('agent')
-        }
 
-    def __repr__(self):
-        return '<UserLogs %r>' % self.id
-
-
-class User(UserMixin, db.Model):
+class User(UserMixin, Model, SurrogatePK):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
+
     email = db.Column(db.String(64), unique=True, index=True)
     username = db.Column(db.String(128))
     sex = db.Column(db.Integer, default=-1)
@@ -75,13 +61,11 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     confirmed = db.Column(db.Boolean, default=False)
     disable = db.Column(db.Boolean, default=False)
-    department = db.Column(db.String(128))
-    position = db.Column(db.String(128))
     mobile = db.Column(db.String(20))
     qq = db.Column(db.String(20))
     wechat = db.Column(db.String(50))
     mark = db.Column(db.String(200))
-    indb_date = db.Column(db.DateTime, default=datetime.now())
+    gen_date = db.Column(db.DateTime, default=datetime.now())
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -142,7 +126,7 @@ class User(UserMixin, db.Model):
         return user
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '{0}'.format(self.username)
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -155,17 +139,5 @@ class AnonymousUser(AnonymousUserMixin):
     def is_administrator():
         return False
 
-
-class Alembic(db.Model):
-    __tablename__ = 'alembic_version'
-    version_num = db.Column(db.String(32), primary_key=True, nullable=False)
-
-    @staticmethod
-    def clear_a():
-        for a in Alembic.query.all():
-            print a.version_num
-            db.session.delete(a)
-        db.session.commit()
-        print '======== data in Table: Alembic cleared!'
 
 login_manager.anonymous_user = AnonymousUser

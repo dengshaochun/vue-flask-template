@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getList() {
   return request({
-    url: '/api/table/list',
+    url: '/table/list',
     method: 'get'
   })
 }
