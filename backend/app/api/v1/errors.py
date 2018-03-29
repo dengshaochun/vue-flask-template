@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/2/27 17:44
 # @Author  : Dengsc
-# @Site    : 
+# @Site    :
 # @File    : errors.py
 # @Software: PyCharm
 
@@ -26,4 +26,3 @@ def bad_request(message):
     response = jsonify({'error': 'bad requset', 'message': message})
     response.status_code = 400
     return response
-

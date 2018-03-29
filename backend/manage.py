@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/2/27 17:39
 # @Author  : Dengsc
-# @Site    : 
+# @Site    :
 # @File    : manage.py
 # @Software: PyCharm
 

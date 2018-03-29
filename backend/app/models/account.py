@@ -37,6 +37,10 @@ class Role(SurrogatePK, Model):
     permission = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
+    @classmethod
+    def get_by_name(cls, name):
+        return cls.query.filter_by(name=name).first()
+
     def __repr__(self):
         return '{0}'.format(self.name)
 

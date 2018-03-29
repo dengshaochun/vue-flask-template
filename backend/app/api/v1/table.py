@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/3/28 20:29
 # @Author  : Dengsc
-# @Site    : 
+# @Site    :
 # @File    : table.py
 # @Software: PyCharm
 
@@ -23,20 +23,23 @@ class TableAPI(Resource):
                 'items': [
                     {
                         'id': '360000199306106784',
-                        'title': 'Mglmg kterc exbr kdpgvt rfuncbga haotykj cjasbxxu jberoy nfurkg ekmgpp qnnv oosqn'
-                                 ' kpakuaej nbxs shueu ctjnyhbonw pzinlelcr utypmbgt.',
+                        'title': 'Mglmg kterc exbr kdpgvt rfuncbga haotykj '
+                                 'cjasbxxu jberoy nfurkg ekmgpp qnnv oosqn'
+                                 ' kpakuaej nbxs shueu ctjnyhbonw '
+                                 'pzinlelcr utypmbgt.',
                         'status': 'draft',
                         'author': 'name',
                         'display_time': '2001-03-17 06:35:08',
                         'pageviews': 4212
                     },
                     {
-                      'id': '140000199204050256',
-                      'title': 'Pwnotb dpy phyfkyq mtqhlhxre qdmktpth rggx byad rnhjph yaye btlrbij hrtdxlf.',
-                      'status': 'published',
-                      'author': 'name',
-                      'display_time': '1975-05-19 02:19:44',
-                      'pageviews': 4319
+                        'id': '140000199204050256',
+                        'title': 'Pwnotb dpy phyfkyq mtqhlhxre qdmktpth rggx'
+                                 ' byad rnhjph yaye btlrbij hrtdxlf.',
+                        'status': 'published',
+                        'author': 'name',
+                        'display_time': '1975-05-19 02:19:44',
+                        'pageviews': 4319
                     }
                 ]
             }

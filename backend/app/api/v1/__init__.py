@@ -37,4 +37,3 @@ from app.api.v1 import errors  # NOQA
 from app.api.v1 import user  # NOQA
 from app.api.v1 import table  # NOQA
 from app.api.v1 import login  # NOQA
-

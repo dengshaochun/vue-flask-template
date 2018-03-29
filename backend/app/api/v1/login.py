@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/3/28 20:27
 # @Author  : Dengsc
-# @Site    : 
+# @Site    :
 # @File    : login.py
 # @Software: PyCharm
 
@@ -24,7 +24,7 @@ class LoginResource(Resource):
             'code': 20000,
             'data': {
                 'token': g.current_user.generate_auth_token(expiration=3600)
-                }
+            }
         }
 
     def put(self):
@@ -50,6 +50,7 @@ class LogoutResource(Resource):
 
     def delete(self):
         pass
+
 
 api.add_resource(LoginResource, '/user/login')
 api.add_resource(LogoutResource, '/user/logout')

@@ -53,10 +53,12 @@ class UserResource(Resource):
             'data': {
                 'roles': [x.name for x in Role.query.all() if x is not None],
                 'role': [
-                    Role.query.filter_by(id=g.current_user.role_id).first().name
+                    Role.query.filter_by(
+                        id=g.current_user.role_id).first().name
                 ],
                 'name': g.current_user.username,
-                'avatar': 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+                'avatar': 'https://wpimg.wallstcn.com/'
+                          'f778738c-e4f8-4870-b634-56703b4acafe.gif'
             }
         }
 

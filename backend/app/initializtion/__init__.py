@@ -27,6 +27,7 @@ class Init(object):
         u.username = 'dengsc'
         u.email = 'dengsc@example.com'
         u.password = '12345'
-        u.role = Role.get_by_id(1)
+        u.confirmed = True
+        u.role = Role.get_by_name('admin')
         db.session.add(u)
         db.session.commit()
