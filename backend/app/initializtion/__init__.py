@@ -8,18 +8,14 @@
 
 
 from app.database import db
-from app.models.account import User, Role, Permission
+from app.models.account import User, Role
 
 
 class Init(object):
 
     @staticmethod
     def add_role():
-        r = Role()
-        r.name = 'admin'
-        r.permission = Permission.ADMINISTER
-        db.session.add(r)
-        db.session.commit()
+        Role.insert_roles()
 
     @staticmethod
     def add_user():
@@ -28,6 +24,6 @@ class Init(object):
         u.email = 'dengsc@example.com'
         u.password = '12345'
         u.confirmed = True
-        u.role = Role.get_by_name('admin')
+        u.role = Role.get_by_name('Administrator')
         db.session.add(u)
         db.session.commit()

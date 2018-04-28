@@ -7,32 +7,31 @@
 # @Software: PyCharm
 
 
-from flask import g
+from flask import g, abort
 from flask_restful import Resource, reqparse, marshal_with, fields
-from app.models.account import Role
-from auth import auth
+from app.models.account import User
+from auth import multi_auth, self_only
 from app.api.v1 import api, meta_fields
 from app.helpers import paginate
 
 
-parser = reqparse.RequestParser()
-parser.add_argument('username', type=str)
-parser.add_argument('password', type=str)
+user_parser = reqparse.RequestParser()
+user_parser.add_argument('username', type=str)
+user_parser.add_argument('password', type=str)
 
 
 # Marshaled field definitions for user objects
 user_fields = {
-    'id': fields.Integer,
+    'email': fields.String,
     'username': fields.String,
-    'sex': fields.String,
     'role_id': fields.String,
     'confirmed': fields.String,
-    'disable': fields.String,
-    'mobile': fields.String,
-    'qq': fields.String,
-    'wechat': fields.String,
-    'mark': fields.String,
-    'gen_date': fields.String
+    'name': fields.String,
+    'location': fields.String,
+    'about_me': fields.String,
+    'member_since': fields.String,
+    'last_seen': fields.String,
+    'avatar_hash': fields.String
 }
 
 
@@ -43,30 +42,66 @@ user_collection_fields = {
 }
 
 
+@marshal_with(user_fields)
+def format_user(user):
+    return user
+
+
+@marshal_with(user_collection_fields)
+@paginate()
+def format_users(users):
+    return users
+
+
 class UserResource(Resource):
 
-    decorators = [auth.login_required, ]
+    def get(self, user_id=None, username=None):
+        user = None
+        if username is not None:
+            user = User.get_by_username(username)
+        else:
+            user = User.get_by_id(user_id)
 
-    def get(self):
+        if not user:
+            abort(404)
         return {
             'code': 20000,
-            'data': {
-                'roles': [x.name for x in Role.query.all() if x is not None],
-                'role': [
-                    Role.query.filter_by(
-                        id=g.current_user.role_id).first().name
-                ],
-                'name': g.current_user.username,
-                'avatar': 'https://wpimg.wallstcn.com/'
-                          'f778738c-e4f8-4870-b634-56703b4acafe.gif'
-            }
+            'data': format_user(user)
         }
 
-    def put(self):
-        pass
+    @multi_auth.login_required
+    @self_only
+    def post(self, user_id=None, username=None):
+        g.current_user.update(**user_parser.parse_args())
+        return {
+            'code': 20000,
+            'data': format_user(g.current_user)
+        }
 
-    def delete(self):
-        pass
+    @multi_auth.login_required
+    @self_only
+    def delete(self, user_id=None, username=None):
+        g.current_user.delete()
+        return 204
 
 
-api.add_resource(UserResource, '/user/info')
+class UserCollectionResource(Resource):
+
+    def get(self):
+        users = User.query
+        return {
+            'code': 20000,
+            'data': format_users(users)
+        }
+
+    @marshal_with(user_fields)
+    def post(self):
+        user = User.create(**user_parser.parse_args())
+        return {
+            'code': 20000,
+            'data': format_user(user)
+               }, 201
+
+
+api.add_resource(UserResource, '/users/<int:user_id>/', '/users/<username>/')
+api.add_resource(UserCollectionResource, '/users/')

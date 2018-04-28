@@ -9,48 +9,39 @@
 
 from flask import g
 from flask_restful import Resource
-from auth import auth
+from auth import multi_auth
 from app.api.v1 import api
+from .errors import unauthorized
+from flask_login import logout_user
 
 
 class LoginResource(Resource):
-    decorators = [auth.login_required, ]
-
-    def get(self):
-        pass
+    decorators = [multi_auth.login_required, ]
 
     def post(self):
+        if g.current_user.is_anonymous() or g.token_used:
+            return unauthorized('Invalid credentials!')
+        data = {
+            'token': g.current_user.generate_auth_token(expiration=3600),
+            'username': g.current_user.username,
+            'expiration': 3600
+        }
         return {
             'code': 20000,
-            'data': {
-                'token': g.current_user.generate_auth_token(expiration=3600)
-            }
+            'data': data
         }
-
-    def put(self):
-        pass
-
-    def delete(self):
-        pass
 
 
 class LogoutResource(Resource):
-
-    def get(self):
-        pass
+    decorators = [multi_auth.login_required, ]
 
     def post(self):
+        logout_user()
         return {
             'code': 20000,
             'data': 'success'
         }
 
-    def put(self):
-        pass
 
-    def delete(self):
-        pass
-
-
-api.add_resource(LoginResource, '/user/login')
-api.add_resource(LogoutResource, '/user/logout')
+api.add_resource(LoginResource, '/login/')
+api.add_resource(LogoutResource, '/logout/')

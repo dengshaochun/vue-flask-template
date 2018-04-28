@@ -8,13 +8,13 @@
 
 
 from flask_restful import Resource
-from auth import auth
+from auth import multi_auth
 from app.api.v1 import api
 
 
 class TableAPI(Resource):
 
-    decorators = [auth.login_required, ]
+    decorators = [multi_auth.login_required, ]
 
     def get(self):
         return {
@@ -45,14 +45,6 @@ class TableAPI(Resource):
             }
         }
 
-    def post(self):
-        pass
-
-    def delete(self):
-        pass
-
-    def put(self):
-        pass
 
 
-api.add_resource(TableAPI, '/table/list')
+api.add_resource(TableAPI, '/table/list/')

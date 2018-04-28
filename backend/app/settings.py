@@ -16,6 +16,11 @@ class Config(object):
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    TOKEN_AUTH_COOKIE = os.environ.get('TOKEN_AUTH_COOKIE',
+                                       'token')
+    TOKEN_AUTH_HEADER_PREFIX = os.environ.get('TOKEN_AUTH_HEADER_PREFIX',
+                                              'Bearer')
+
     ADMIN = 'admin@jiguang.cn'
 
     ERROR_404_HELP = False

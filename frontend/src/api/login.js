@@ -1,8 +1,9 @@
 import request from '@/utils/request'
+import store from '../store'
 
 export function login(username, password) {
   return request({
-    url: '/user/login',
+    url: '/login/',
     method: 'post',
     auth: {
       username: username,
@@ -13,14 +14,14 @@ export function login(username, password) {
 
 export function getInfo() {
   return request({
-    url: '/user/info',
+    url: '/users/' + store.getters.name + '/',
     method: 'get'
   })
 }
 
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: '/logout/',
     method: 'post'
   })
 }

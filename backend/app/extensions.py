@@ -3,8 +3,10 @@
 in __init__.py
 """
 
-from flask_httpauth import HTTPBasicAuth
-auth = HTTPBasicAuth()
+from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth, MultiAuth
+basic_auth = HTTPBasicAuth()
+token_auth = HTTPTokenAuth(scheme='Bearer')
+multi_auth = MultiAuth(basic_auth, token_auth)
 
 from flask_sqlalchemy import SQLAlchemy  # NOQA
 db = SQLAlchemy()
